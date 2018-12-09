@@ -57,6 +57,17 @@ aws ssm put-parameter --name "/netbox/db_pass" --type "SecureString" --value 'ab
 aws ssm put-parameter --name "/netbox/secret_key" --type "SecureString" --value 'abcdefghijklmnopqrstuvwxyz1234567890'
 ```
 
+4) Create S3 Bucket to store artifact
+```bash
+aws s3api create-bucket --bucket aws-netbox-deployment-sample --region us-west-2
+```
+
+5) Create artifact and upload to S3 Bucket
+```bash
+zip build.zip -r inventory playbooks roles ansible.cfg requirements.txt
+aws s3 cp build.zip s3://aws-netbox-deployment-sample/
+```
+
 4) Using Terraform, deploy into AWS
 ```bash
 export AWS_ACCESS_KEY_ID="SAMPLEACCESSKEY"
