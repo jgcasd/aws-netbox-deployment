@@ -90,7 +90,7 @@ zip build.zip -r inventory playbooks roles ansible.cfg requirements.txt
 aws s3 cp build.zip s3://aws-netbox-deployment-sample/
 ```
 
-3)Using Terraform, deploy into AWS
+3) Using Terraform, deploy into AWS
 ```bash
 export AWS_ACCESS_KEY_ID="SAMPLEACCESSKEY"
 export AWS_SECRET_ACCESS_KEY="SAMPLESECRETACCESSKEY"
