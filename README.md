@@ -5,6 +5,7 @@ Code for deploying Netbox into AWS
 The code contained in this repo support deploying the Netbox IPAM service into AWS on EC2 instances. The infrastructure automation is driven by Terraform while the configuration of the EC2 instances is performed by Ansible. These instances are configured to "self-instanstiate" by calling Ansible with user data.
 
 # Installation
+
 1) Create a new environment directory inside inventory following a similar pattern to the sample provided.
 * The following variables are required inisde your inventory/{environment}/group_vars/all.yml file:
 
@@ -48,7 +49,7 @@ The code contained in this repo support deploying the Netbox IPAM service into A
 | Region | Region the application will be deployed in |
 
 
-3) Add parameters to parameter store
+3) Add parameters to parameter store.
 ```bash
 aws ssm put-parameter --name "/netbox/user" --type "String" --value "netbox-admin"
 aws ssm put-parameter --name "/netbox/email" --type "String" --value "netbox-admin@sample.com"
@@ -57,18 +58,18 @@ aws ssm put-parameter --name "/netbox/db_pass" --type "SecureString" --value 'ab
 aws ssm put-parameter --name "/netbox/secret_key" --type "SecureString" --value 'abcdefghijklmnopqrstuvwxyz1234567890'
 ```
 
-4) Create S3 Bucket to store artifact
+4) Create S3 Bucket to store artifact.
 ```bash
 aws s3api create-bucket --bucket aws-netbox-deployment-sample --region us-west-2
 ```
 
-5) Create artifact and upload to S3 Bucket
+5) Create artifact and upload to S3 Bucket.
 ```bash
 zip build.zip -r inventory playbooks roles ansible.cfg requirements.txt
 aws s3 cp build.zip s3://aws-netbox-deployment-sample/
 ```
 
-6) Using Terraform, deploy into AWS
+6) Using Terraform, deploy into AWS.
 ```bash
 export AWS_ACCESS_KEY_ID="SAMPLEACCESSKEY"
 export AWS_SECRET_ACCESS_KEY="SAMPLESECRETACCESSKEY"
@@ -77,3 +78,31 @@ terraform init
 terraform plan --var-file="sample.tfvars"
 terraform apply --var-file="sample.tfvars"
 ```
+
+# Application Updates
+Application updates only require a few steps.
+
+1) Update inventory/{environment}/group_vars/all.yml with the new "netbox_version" number.
+
+2) Create artifact and upload to S3 Bucket.
+```bash
+zip build.zip -r inventory playbooks roles ansible.cfg requirements.txt
+aws s3 cp build.zip s3://aws-netbox-deployment-sample/
+```
+
+3)Using Terraform, deploy into AWS
+```bash
+export AWS_ACCESS_KEY_ID="SAMPLEACCESSKEY"
+export AWS_SECRET_ACCESS_KEY="SAMPLESECRETACCESSKEY"
+export AWS_REGION="us-west-2"
+terraform init
+terraform plan --var-file="sample.tfvars"
+terraform apply --var-file="sample.tfvars"
+```
+
+# Group management
+Granting new groups access into Netbox is easy.
+
+1) Update inventory/{environment}/group_vars/all.yml and add the group under "allowed_groups".
+
+2) Once a user has logged in from that group, you can go into the Netbox management console to assign more granular permissions as needed.
