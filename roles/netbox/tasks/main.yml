@@ -1,0 +1,91 @@
+- name: download netbox
+  get_url:
+    url: https://github.com/digitalocean/netbox/archive/v{{ netbox_version }}.tar.gz
+    dest: /home/ubuntu/netbox.tar.gz
+
+- name: extract netbox.tar.gz into /opt/netbox
+  unarchive:
+    src: /home/ubuntu/netbox.tar.gz
+    dest: /opt
+
+- name: build symlink
+  file:
+    src: /opt/netbox-{{ netbox_version }}/
+    dest: /opt/netbox
+    owner: netbox
+    state: link
+
+- name: install virtualenv
+  pip:
+    name: virtualenv
+
+- name: install netbox requirements
+  pip:
+    requirements: /opt/netbox/requirements.txt
+    virtualenv: /home/netbox/venv
+
+- name: install ldap requirements
+  pip:
+    name:
+    - ldap
+    - django_auth_ldap
+    virtualenv: /home/netbox/venv
+  when: env == 'prod'
+
+- name: allow access to virtualenv
+  file:
+    path: /home/netbox/venv
+    owner: netbox
+    group: netbox
+    recurse: yes
+
+- name: copy netbox configuration file
+  template:
+    src: templates/configuration.j2
+    dest: /opt/netbox/netbox/netbox/configuration.py
+    owner: netbox
+    group: netbox
+
+- name: copy ldap configuration file
+  template:
+    src: templates/ldap_config.py.j2
+    dest: /opt/netbox/netbox/netbox/ldap_config.py
+    owner: netbox
+    group: netbox
+  when: env == 'prod'
+
+- name: update settings.py file with settings that force session expiration
+  lineinfile:
+    path: /opt/netbox/netbox/netbox/settings.py
+    regexp: 'SESSION_EXPIRE_AT_BROWSER_CLOSE'
+    line: "SESSION_EXPIRE_AT_BROWSER_CLOSE = getattr(configuration, 'SESSION_EXPIRE_AT_BROWSER_CLOSE', False)"
+
+- name: update settings.py file with settings that force session expiration
+  lineinfile:
+    path: /opt/netbox/netbox/netbox/settings.py
+    regexp: 'SESSION_COOKIE_AGE'
+    line: "SESSION_COOKIE_AGE = getattr(configuration, 'SESSION_COOKIE_AGE', 60 * 60 * 24 * 14)"
+
+- name: allow access to netbox dirs
+  file:
+    path: /opt/netbox-{{ netbox_version }}
+    owner: netbox
+    group: netbox
+    recurse: yes
+
+- name: collect static files
+  shell: /home/netbox/venv/bin/python3 /opt/netbox/netbox/manage.py collectstatic --no-input
+  become: yes
+  become_user: netbox
+
+- name: database migration
+  shell: /home/netbox/venv/bin/python3 /opt/netbox/netbox/manage.py migrate
+  become: yes
+  become_user: netbox
+
+- name: createsupseruser
+  shell: echo "from django.contrib.auth.models import User; User.objects.create_superuser('{{ auth.netbox_user }}', '{{ auth.netbox_email }}', '{{ auth.netbox_pass }}')" | /home/netbox/venv/bin/python3 /opt/netbox/netbox/manage.py shell
+  become: yes
+  become_user: netbox
+  ignore_errors: yes
+  no_log: True

@@ -1,0 +1,12 @@
+netbox_version: 2.4.8
+db_name: netbox
+db_user: netbox
+region: us-west-2
+server_name: netbox.sample.com
+AUTH_LDAP_USER_SEARCH_BASEDN: "OU=Operations,DC=sample,DC=com"
+AUTH_LDAP_GROUP_SEARCH_BASEDN: "OU=Operations,DC=sample,DC=com"
+active_groups:
+- "CN=IPAM ReadOnly,OU=Operations,DC=sample,DC=com"
+- "CN=IPAM ReadWrite,OU=Operations,DC=sample,DC=com"
+- "CN=IPAM Admin,OU=Operations,DC=sample,DC=com"
+staff_group: "CN=IPAM Admin,OU=Operations,DC=sample,DC=com"

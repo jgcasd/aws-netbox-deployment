@@ -1,0 +1,55 @@
+- name: Update and upgrade apt packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Install required netbox packages
+  apt:
+    name:
+    - build-essential
+    - libxml2-dev
+    - libxslt1-dev
+    - libffi-dev
+    - graphviz
+    - libpq-dev
+    - libssl-dev
+    - zlib1g-dev
+    - python3-dev
+    - libsasl2-dev
+    - libldap2-dev
+    state: present
+
+# Our application will be run under the netbox user
+# Let's create that here
+- name:
+  group:
+    name: netbox
+    state: present
+
+- name:
+  user:
+    name: netbox
+    group: netbox
+    state: present
+
+
+# iptables is turned on in our CIS hardened image.
+# We need to open up a couple ports for our application to work.
+# tcp/80 is required by nginx
+# tcp/8001 is required by gunicorn/netbox
+- name: Firewall rule - allow port 80 traffic
+  iptables:
+    action: append
+    chain: INPUT
+    destination_port: 80
+    jump: ACCEPT
+    protocol: tcp
+
+- name: Firewall rule - allow port 8001 traffic
+  iptables:
+    action: append
+    chain: INPUT
+    destination_port: 8001
+    jump: ACCEPT
+    protocol: tcp
