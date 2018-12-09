@@ -1,0 +1,22 @@
+- name: install gunicorn
+  pip:
+    name: gunicorn
+    virtualenv: /home/netbox/venv
+
+- name: copy gunicorn configuration file
+  copy:
+    src: files/gunicorn_config.py
+    dest: /opt/netbox/gunicorn_config.py
+    owner: netbox
+
+- name: allow access to netbox dir
+  file:
+    path: /opt/netbox-{{ netbox_version }}
+    owner: netbox
+    group: netbox
+    recurse: yes
+
+- name: start service
+  shell: cd /opt/netbox && nohup /home/netbox/venv/bin/gunicorn -c /opt/netbox/gunicorn_config.py netbox.wsgi &
+  become: yes
+  become_user: netbox

@@ -1,0 +1,9 @@
+command = '/home/netbox/venv/bin/gunicorn'
+pythonpath = '/opt/netbox/netbox'
+bind = '127.0.0.1:8001'
+workers = 3
+user = 'netbox'
+pidfile = '/home/netbox/gunicorn.pid'
+worker_tmp_dir = '/home/netbox'
+accesslog = '/home/netbox/access.log'
+errorlog = '/home/netbox/error.log'

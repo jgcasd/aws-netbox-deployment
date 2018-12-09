@@ -1,0 +1,34 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${S3Bucket}",
+        "arn:aws:s3:::${S3Bucket}/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:Encrypt",
+        "kms:Decrypt"
+      ],
+      "Resource": "${KMSKeyId}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ssm:PutParameter",
+        "ssm:GetParameters",
+        "ssm:GetParameter",
+        "ssm:DeleteParameters"
+      ],
+      "Resource": "arn:aws:ssm:${Region}:${Account}:parameter/netbox-core/*"
+    }
+  ]
+}

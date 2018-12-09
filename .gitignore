@@ -1,0 +1,25 @@
+# ide meta
+.vscode/
+
+# compiled python modules
+*.pyc
+
+# build artifacts
+*.zip
+
+# developer virtualenvs
+venv/
+
+# mac attributes file
+.DS_Store
+
+# xlsx temp files
+~$*
+
+# Ansible retry files
+*.retry
+
+# Ignore terraform testing config
+*.tfstate
+*.backup
+.terraform/

@@ -1,0 +1,176 @@
+#########################
+#                       #
+#   Required settings   #
+#                       #
+#########################
+
+# This is a list of valid fully-qualified domain names (FQDNs) for the NetBox server. NetBox will not permit write
+# access to the server via any other hostnames. The first FQDN in the list will be treated as the preferred name.
+#
+# Example: ALLOWED_HOSTS = ['netbox.example.com', 'netbox.internal.local']
+ALLOWED_HOSTS = ['*']
+
+# PostgreSQL database configuration.
+DATABASE = {
+    'NAME': '{{ db_name }}',  # Database name
+    'USER': '{{ db_user }}',  # PostgreSQL username
+    'PASSWORD': '{{ auth.db_pass }}',  # PostgreSQL password
+    'HOST': '{{ db_host }}',  # Database server
+    'PORT': '5432',  # Database port (leave blank for default)
+}
+
+# This key is used for secure generation of random numbers and strings. It must never be exposed outside of this file.
+# For optimal security, SECRET_KEY should be at least 50 characters in length and contain a mix of letters, numbers, and
+# symbols. NetBox will not run without this defined. For more information, see
+# https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECRET_KEY
+SECRET_KEY = '{{ auth.secret_key }}'
+
+#########################
+#                       #
+#   Optional settings   #
+#                       #
+#########################
+
+# Specify one or more name and email address tuples representing NetBox administrators. These people will be notified of
+# application errors (assuming correct email settings are provided).
+ADMINS = [
+    # ['John Doe', 'jdoe@example.com'],
+]
+
+# Optionally display a persistent banner at the top and/or bottom of every page. HTML is allowed. To display the same
+# content in both banners, define BANNER_TOP and set BANNER_BOTTOM = BANNER_TOP.
+BANNER_TOP = ''
+BANNER_BOTTOM = ''
+
+# Text to include on the login page above the login form. HTML is allowed.
+BANNER_LOGIN = """<svg style="color:#ec881d;" id="logo-teradata" viewBox="0 0 100 23" enable-background="new 0 0 100 23" width="35%" height="50%">
+		<g fill="currentColor">
+			<path d="M17.1,0.4H0.6L0,2.2h7.6v18.9c0,1,0.6,1.5,1.7,1.5h1V2.2h6.2L17.1,0.4L17.1,0.4z M69.1,5c-0.7,0-1.2,0.2-1.3,0.6l-5.5,14.6
+				h1c1.1,0,1.6-0.1,1.9-1l1.2-3.4h3.3l-0.5-1.6H67l2-5.8l3.7,10.8c0.3,0.9,0.8,1,2,1H76L70.4,5.6C70.3,5.3,69.7,5,69.1,5 M91.2,5.6
+				C91.1,5.3,90.5,5,89.9,5c-0.7,0-1.2,0.2-1.3,0.6L83,20.2h1c1.1,0,1.6-0.1,1.9-1l1.2-3.4h3.3L90,14.1h-2.3l2-5.8l3.7,10.8
+				c0.3,0.9,0.8,1,2,1h1.3L91.2,5.6L91.2,5.6z M42.8,5c-0.7,0-1.2,0.2-1.3,0.6l-5.3,14l-3.9-6c2.1-0.4,3.3-1.5,3.3-3.3V9
+				c0-2.7-2.5-3.8-5.8-3.8h-4.6v13.3h-6c-2.4,0-2.9-0.5-2.9-3V13h4.4l0.5-1.7h-4.9V6.9h6.5l0.5-1.7h-9.8v10.3c0,3.5,0.8,4.6,5.6,4.6
+				l8.8,0V6.9h1.9c2.1,0,3.2,0.7,3.2,2.2v1.3c0,1.5-1.3,1.9-2.9,1.9h-1.2l4.1,7c0.5,0.8,0.7,0.9,1.8,0.9H37c1.1,0,1.6-0.1,1.9-1
+				l1.2-3.4h3.3l-0.5-1.6h-2.3l2-5.8l3.7,10.8c0.3,0.9,0.8,1,2,1h1.3L44.1,5.6C44,5.3,43.4,5,42.8,5 M59.6,14c0,3-1,4.5-3.7,4.5h-2.4
+				V6.9h2.3c2.8,0,3.8,1.6,3.8,4.6V14L59.6,14z M62.3,11.5c0-4.2-2.1-6.3-6.5-6.3h-5.1v13.4c0,1,0.6,1.5,1.7,1.5h3.4l0.6,0
+				c4-0.1,5.9-1.9,5.9-6.1V11.5L62.3,11.5z M86.1,5.3H73.7l-0.5,1.7h5.1v11.8c0,1,0.6,1.5,1.7,1.5h1V6.9h4.6L86.1,5.3L86.1,5.3z"></path>
+			<path d="M99,18.5c-0.1,0-0.2-0.1-0.3-0.1h-0.2v0.5h0.2c0.1,0,0.2,0,0.2,0c0.1,0,0.1-0.1,0.1-0.2C99.1,18.6,99,18.5,99,18.5
+					M98.7,18.3c0.2,0,0.3,0,0.4,0.1c0.1,0.1,0.2,0.2,0.2,0.4c0,0.1,0,0.2-0.1,0.3c0,0-0.1,0.1-0.2,0.1c0.1,0,0.2,0.1,0.2,0.1
+				c0,0.1,0.1,0.1,0.1,0.2v0.1c0,0,0,0.1,0,0.1c0,0,0,0.1,0,0.1l0,0h-0.2c0,0,0,0,0,0c0,0,0,0,0,0l0,0v-0.1c0-0.2,0-0.3-0.1-0.3
+				c0,0-0.1,0-0.3,0h-0.2v0.6h-0.2v-1.4H98.7L98.7,18.3z M97.9,18.2c-0.2,0.2-0.3,0.5-0.3,0.8c0,0.3,0.1,0.6,0.3,0.8
+				c0.2,0.2,0.5,0.3,0.8,0.3c0.3,0,0.6-0.1,0.8-0.3c0.2-0.2,0.3-0.5,0.3-0.8c0-0.3-0.1-0.6-0.3-0.8c-0.2-0.2-0.5-0.3-0.8-0.3
+				C98.4,17.9,98.2,18,97.9,18.2 M99.6,19.9c-0.2,0.3-0.6,0.4-0.9,0.4c-0.4,0-0.7-0.1-0.9-0.4c-0.2-0.3-0.4-0.6-0.4-0.9
+				c0-0.4,0.1-0.7,0.4-0.9c0.2-0.2,0.5-0.4,0.9-0.4c0.4,0,0.7,0.1,0.9,0.4s0.4,0.5,0.4,0.9C100,19.3,99.9,19.6,99.6,19.9"></path>
+		</g>
+	</svg>"""
+
+# Base URL path if accessing NetBox within a directory. For example, if installed at http://example.com/netbox/, set:
+# BASE_PATH = 'netbox/'
+BASE_PATH = ''
+
+# API Cross-Origin Resource Sharing (CORS) settings. If CORS_ORIGIN_ALLOW_ALL is set to True, all origins will be
+# allowed. Otherwise, define a list of allowed origins using either CORS_ORIGIN_WHITELIST or
+# CORS_ORIGIN_REGEX_WHITELIST. For more information, see https://github.com/ottoyiu/django-cors-headers
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    # 'hostname.example.com',
+]
+CORS_ORIGIN_REGEX_WHITELIST = [
+    # r'^(https?://)?(\w+\.)?example\.com$',
+]
+
+# Set to True to enable server debugging. WARNING: Debugging introduces a substantial performance penalty and may reveal
+# sensitive information about your installation. Only enable debugging while performing testing. Never enable debugging
+# on a production system.
+DEBUG = False
+
+# Email settings
+EMAIL = {
+    'SERVER': 'localhost',
+    'PORT': 25,
+    'USERNAME': '',
+    'PASSWORD': '',
+    'TIMEOUT': 10,  # seconds
+    'FROM_EMAIL': '',
+}
+
+# Enforcement of unique IP space can be toggled on a per-VRF basis. To enforce unique IP space within the global table
+# (all prefixes and IP addresses not assigned to a VRF), set ENFORCE_GLOBAL_UNIQUE to True.
+ENFORCE_GLOBAL_UNIQUE = True
+
+# Enable custom logging. Please see the Django documentation for detailed guidance on configuring custom logs:
+#   https://docs.djangoproject.com/en/1.11/topics/logging/
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/home/netbox/netbox.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+        },
+    },
+}
+
+# Setting this to True will permit only authenticated users to access any part of NetBox. By default, anonymous users
+# are permitted to access most data in NetBox (excluding secrets) but not make any changes.
+LOGIN_REQUIRED = True
+
+# Setting this to True will display a "maintenance mode" banner at the top of every page.
+MAINTENANCE_MODE = False
+
+# An API consumer can request an arbitrary number of objects =by appending the "limit" parameter to the URL (e.g.
+# "?limit=1000"). This setting defines the maximum limit. Setting it to 0 or None will allow an API consumer to request
+# all objects by specifying "?limit=0".
+MAX_PAGE_SIZE = 10000
+
+# The file path where uploaded media such as image attachments are stored. A trailing slash is not needed. Note that
+# the default value of this setting is derived from the installed location.
+# MEDIA_ROOT = '/opt/netbox/netbox/media'
+
+# Credentials that NetBox will uses to authenticate to devices when connecting via NAPALM.
+NAPALM_USERNAME = ''
+NAPALM_PASSWORD = ''
+
+# NAPALM timeout (in seconds). (Default: 30)
+NAPALM_TIMEOUT = 30
+
+# NAPALM optional arguments (see http://napalm.readthedocs.io/en/latest/support/#optional-arguments). Arguments must
+# be provided as a dictionary.
+NAPALM_ARGS = {}
+
+# Determine how many objects to display per page within a list. (Default: 50)
+PAGINATE_COUNT = 50
+
+# When determining the primary IP address for a device, IPv6 is preferred over IPv4 by default. Set this to True to
+# prefer IPv4 instead.
+PREFER_IPV4 = True
+
+# The file path where custom reports will be stored. A trailing slash is not needed. Note that the default value of
+# this setting is derived from the installed location.
+# REPORTS_ROOT = '/opt/netbox/netbox/reports'
+
+# Time zone (default: UTC)
+TIME_ZONE = 'America/Los_Angeles'
+
+# Date/time formatting. See the following link for supported formats:
+# https://docs.djangoproject.com/en/dev/ref/templates/builtins/#date
+DATE_FORMAT = 'N j, Y'
+SHORT_DATE_FORMAT = 'Y-m-d'
+TIME_FORMAT = 'g:i a'
+SHORT_TIME_FORMAT = 'H:i:s'
+DATETIME_FORMAT = 'N j, Y g:i a'
+SHORT_DATETIME_FORMAT = 'Y-m-d H:i'
+
+# The default Django session timeout is set to 14 days.
+# Here we can either adjust the default timeout by setting SESSION_COOKIE_AGE or
+# we can expire the cookies when the browser is closed with SESSION_EXPIRE_AT_BROWSER_CLOSE.
+# These variables are mutually exclusive.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 3600
