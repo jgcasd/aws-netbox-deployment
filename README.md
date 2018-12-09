@@ -46,3 +46,13 @@ The code contained in this repo support deploying the Netbox IPAM service into A
 | AllowedIngress | List of subnets allowed to access to the Netbox ELB |
 | Account | Id of your AWS account |
 | Region | Region the application will be deployed in |
+
+3) Using Terraform, deploy into AWS
+```bash
+export AWS_ACCESS_KEY_ID="SAMPLEACCESSKEY"
+export AWS_SECRET_ACCESS_KEY="SAMPLESECRETACCESSKEY"
+export AWS_REGION="us-west-2"
+terraform init
+terraform plan --var-file="sample.tfvars"
+terraform apply --var-file="sample.tfvars"
+```
