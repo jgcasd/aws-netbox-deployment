@@ -5,21 +5,21 @@
     - name: lookup credentials
       set_fact:
         auth:
-          db_pass: "{{ lookup('aws_ssm', '/netbox_core/db_pass', region='us-west-2') }}"
-          secret_key: "{{ lookup('aws_ssm', '/netbox_core/secret_key', region='us-west-2') }}"
-          netbox_user: "{{ lookup('aws_ssm', '/netbox_core/netbox_user', region='us-west-2') }}"
-          netbox_pass: "{{ lookup('aws_ssm', '/netbox_core/netbox_pass', region='us-west-2') }}"
-          netbox_email: "{{ lookup('aws_ssm', '/netbox_core/netbox_email', region='us-west-2') }}"
+          db_pass: "{{ lookup('aws_ssm', '/netbox/db_pass', region='us-west-2') }}"
+          secret_key: "{{ lookup('aws_ssm', '/netbox/secret_key', region='us-west-2') }}"
+          netbox_user: "{{ lookup('aws_ssm', '/netbox/netbox_user', region='us-west-2') }}"
+          netbox_pass: "{{ lookup('aws_ssm', '/netbox/netbox_pass', region='us-west-2') }}"
+          netbox_email: "{{ lookup('aws_ssm', '/netbox/netbox_email', region='us-west-2') }}"
 
     - name: lookup ldap config parameters
       set_fact:
-        AUTH_LDAP_SERVER_URI: "{{ lookup('aws_ssm', '/netbox_core/auth_ldap_server_uri', region='us-west-2') }}"
-        AUTH_LDAP_BIND_DN: "{{ lookup('aws_ssm', '/netbox_core/auth_ldap_bind_dn', region='us-west-2') }}"
-        AUTH_LDAP_BIND_PASSWORD: "{{ lookup('aws_ssm', '/netbox_core/auth_ldap_bind_password', region='us-west-2') }}"
+        AUTH_LDAP_SERVER_URI: "{{ lookup('aws_ssm', '/netbox/auth_ldap_server_uri', region='us-west-2') }}"
+        AUTH_LDAP_BIND_DN: "{{ lookup('aws_ssm', '/netbox/auth_ldap_bind_dn', region='us-west-2') }}"
+        AUTH_LDAP_BIND_PASSWORD: "{{ lookup('aws_ssm', '/netbox/auth_ldap_bind_password', region='us-west-2') }}"
 
     - name: lookup config
       set_fact:
-        db_host: "{{ lookup('aws_ssm', '/netbox_core/db_host_' + vars['env'], region='us-west-2') }}"
+        db_host: "{{ lookup('aws_ssm', '/netbox/db_host_' + vars['env'], region='us-west-2') }}"
 
   roles:
     - ../roles/base

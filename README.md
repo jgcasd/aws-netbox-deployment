@@ -47,7 +47,17 @@ The code contained in this repo support deploying the Netbox IPAM service into A
 | Account | Id of your AWS account |
 | Region | Region the application will be deployed in |
 
-3) Using Terraform, deploy into AWS
+
+3) Add parameters to parameter store
+```bash
+aws ssm put-parameter --name "/netbox/user" --type "String" --value "netbox-admin"
+aws ssm put-parameter --name "/netbox/email" --type "String" --value "netbox-admin@sample.com"
+aws ssm put-parameter --name '/netbox/pass' --type "SecureString" --value 'abcde12345'
+aws ssm put-parameter --name '/netbox/db_pass' --type "SecureString" --value 'abcde12345'
+aws ssm put-parameter --name '/netbox/secret_key' --type "SecureString" --value 'abcdefghijklmnopqrstuvwxyz1234567890'
+```
+
+4) Using Terraform, deploy into AWS
 ```bash
 export AWS_ACCESS_KEY_ID="SAMPLEACCESSKEY"
 export AWS_SECRET_ACCESS_KEY="SAMPLESECRETACCESSKEY"
